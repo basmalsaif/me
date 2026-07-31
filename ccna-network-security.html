@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CCNA Network Setup and Security Lab by Basma Alsaif.">
+  <title>CCNA Network Setup & Security Lab | Basma Alsaif</title>
+  <style>
+    :root { --bg:#050b14; --panel:#0e1f34; --line:rgba(148,163,184,.2); --text:#f8fbff; --muted:#a8b8c9; --cyan:#55e6d3; --blue:#6aa8ff; --network-dot:rgba(143,192,255,.38); --network-line-rgb:85,230,211; --network-line-opacity:.11; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; color:var(--text); background:radial-gradient(circle at 85% 5%,rgba(85,230,211,.15),transparent 28%),linear-gradient(180deg,var(--bg),#091526); font:16px/1.7 Inter,Arial,sans-serif; position:relative; overflow-x:hidden; }
+    .network { position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+    .container { width:min(calc(100% - 32px),900px); margin:auto; }
+    header { padding:28px 0; border-bottom:1px solid var(--line); position:relative; z-index:1; }
+    header { background:rgba(5,11,20,.2); backdrop-filter:blur(18px); }
+    html[data-theme="light"] header { background:rgba(238,245,251,.2); }
+    header .container { display:flex; align-items:center; justify-content:space-between; gap:16px; direction:ltr; }
+    .back { color:var(--cyan); text-decoration:none; font-weight:700; }
+    main { padding:80px 0; position:relative; z-index:1; }
+    .kicker { color:var(--cyan); text-transform:uppercase; letter-spacing:.14em; font-size:.78rem; font-weight:800; }
+    h1 { margin:12px 0; font-size:clamp(2.5rem,7vw,5rem); line-height:1; letter-spacing:-.06em; }
+    .lead { color:var(--muted); max-width:720px; font-size:1.15rem; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:42px; }
+    .card { padding:24px; border:1px solid var(--line); border-radius:20px; background:rgba(14,31,52,.78); }
+    h2 { margin-top:0; color:var(--cyan); }
+    .tags { display:flex; flex-wrap:wrap; gap:8px; padding:0; list-style:none; }
+    .tag { padding:6px 10px; border:1px solid rgba(106,168,255,.3); border-radius:999px; color:#d8e8ff; background:rgba(106,168,255,.1); }
+    .gallery { margin-top:42px; }
+    .gallery h2 { margin-bottom:18px; }
+    .gallery-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .gallery-grid img { display:block; width:100%; aspect-ratio:4/3; object-fit:cover; border:1px solid var(--line); border-radius:18px; background:var(--panel); transition:transform .2s, border-color .2s; }
+    .gallery-grid img:hover { transform:translateY(-3px); border-color:var(--cyan); }
+    .controls { display:flex; gap:8px; align-items:center; }
+    .control { padding:8px 12px; border:1px solid var(--line); border-radius:10px; background:rgba(255,255,255,.06); color:var(--text); font:inherit; font-weight:700; cursor:pointer; }
+    html[data-theme="light"] { --bg:#eef5fb; --line:rgba(15,45,75,.16); --text:#102236; --muted:#52677c; --cyan:#087f78; --blue:#286cc2; --network-dot:rgba(40,120,190,.34); --network-line-rgb:40,120,190; --network-line-opacity:.15; }
+    html[data-theme="light"] body { background:radial-gradient(1200px 700px at 12% 8%,rgba(120,180,230,.2),transparent 55%),radial-gradient(circle at 84% 14%,rgba(40,108,194,.12),transparent 30%),linear-gradient(135deg,#f7fbff 0%,#eef6ff 48%,#e6f1ff 100%); }
+    html[data-theme="light"] .card { background:rgba(255,255,255,.82); }
+    html[data-theme="light"] .tag { color:#1d5a91; background:rgba(40,108,194,.1); border-color:rgba(40,108,194,.24); }
+    body [lang="ar"] { display:none; }
+    body.ar [lang="en"] { display:none; }
+    body.ar [lang="ar"] { display:inline; }
+    body.ar li[lang="ar"] { display:list-item; }
+    body.ar { direction:rtl; text-align:right; }
+    body.ar .back { direction:ltr; display:inline-block; }
+    @media(max-width:650px) { .grid,.gallery-grid { grid-template-columns:1fr; } main { padding:55px 0; } }
+  </style>
+</head>
+<body>
+  <canvas class="network" id="network" aria-hidden="true"></canvas>
+  <header><div class="container"><a class="back" href="index.html">← <span lang="en">Back to portfolio</span><span lang="ar">العودة إلى portfolio</span></a><div class="controls" id="controls"></div></div></header>
+  <main class="container">
+    <div class="kicker">Project 02</div>
+    <h1>CCNA Network Setup & Security Lab</h1>
+    <p class="lead">A hands-on networking and security laboratory project focused on installing, configuring, segmenting, and protecting an enterprise-style environment.</p>
+    <div class="grid">
+      <article class="card"><h2>Project overview</h2><p>The project included the installation and configuration of routers, switches, and a FortiGate firewall. It applied network segmentation, access control, and security policies while maintaining system stability across Windows Server and Red Hat Linux environments.</p></article>
+      <article class="card"><h2>Key activities</h2><ul><li>Router and switch installation</li><li>Network segmentation</li><li>Access control implementation</li><li>FortiGate firewall configuration</li><li>Security policy configuration</li><li>Windows Server and Red Hat Linux administration</li></ul></article>
+      <article class="card"><h2>Security focus</h2><p>Designed the lab around controlled access, segmented network traffic, firewall enforcement, and stable infrastructure operations.</p></article>
+      <article class="card"><h2>Technology stack</h2><ul class="tags"><li class="tag">Routers</li><li class="tag">Switches</li><li class="tag">FortiGate</li><li class="tag">Windows Server</li><li class="tag">Red Hat Linux</li></ul></article>
+    </div>
+    <section class="gallery" aria-labelledby="gallery-title">
+      <h2 id="gallery-title">Project gallery</h2>
+      <div class="gallery-grid">
+        <img src="ccna-lab-1.jpg" alt="Network equipment and lab setup" loading="lazy">
+        <img src="ccna-lab-2.jpg" alt="Computer workstations used in the network lab" loading="lazy">
+        <img src="ccna-lab-3.jpg" alt="Network connectivity testing in the lab" loading="lazy">
+        <img src="ccna-lab-4.jpg" alt="Network cabling and tools used during setup" loading="lazy">
+      </div>
+    </section>
+  </main>
+  <script>
+    const translations={
+      en:{kicker:'Project 02',title:'CCNA Network Setup & Security Lab',lead:'A hands-on networking and security laboratory project focused on installing, configuring, segmenting, and protecting an enterprise-style environment.',overview:'Project overview',overviewText:'The project included the installation and configuration of routers, switches, and a FortiGate firewall. It applied network segmentation, access control, and security policies while maintaining system stability across Windows Server and Red Hat Linux environments.',activities:'Key activities',security:'Security focus',securityText:'Designed the lab around controlled access, segmented network traffic, firewall enforcement, and stable infrastructure operations.',stack:'Technology stack',gallery:'Project gallery'},
+      ar:{kicker:'المشروع 02',title:'مختبر إعداد الشبكات وأمنها CCNA',lead:'مشروع عملي في الشبكات والأمن يركز على تركيب وتهيئة وتقسيم وحماية بيئة شبيهة ببيئات المؤسسات.',overview:'نظرة عامة على المشروع',overviewText:'تضمن المشروع تركيب وتهيئة الموجهات والمحولات وجدار حماية FortiGate. كما شمل تطبيق تقسيم الشبكة والتحكم في الوصول والسياسات الأمنية، مع الحفاظ على استقرار الأنظمة باستخدام Windows Server وRed Hat Linux.',activities:'الأنشطة الرئيسية',security:'التركيز الأمني',securityText:'تم تصميم المختبر حول التحكم في الوصول، وتقسيم حركة مرور الشبكة، وتطبيق سياسات جدار الحماية، والحفاظ على استقرار البنية التحتية.',stack:'التقنيات المستخدمة',gallery:'معرض المشروع'}
+    };
+    const controls=document.getElementById('controls');
+    const canvas=document.getElementById('network');
+    const context=canvas.getContext('2d');
+    let points=[];
+    let mouse={x:-9999,y:-9999};
+    let networkDotColor='rgba(143, 192, 255, 0.38)';
+    let networkLineColorRGB='85, 230, 211';
+    let networkLineOpacity=0.11;
+
+    function updateNetworkPalette(){
+      const styles=getComputedStyle(document.documentElement);
+      networkDotColor=styles.getPropertyValue('--network-dot').trim()||'rgba(143, 192, 255, 0.38)';
+      networkLineColorRGB=styles.getPropertyValue('--network-line-rgb').trim()||'85, 230, 211';
+      networkLineOpacity=Number(styles.getPropertyValue('--network-line-opacity').trim()||0.11);
+    }
+
+    function resizeCanvas(){
+      const pixelRatio=window.devicePixelRatio||1;
+      canvas.width=window.innerWidth*pixelRatio;
+      canvas.height=window.innerHeight*pixelRatio;
+      canvas.style.width=`${window.innerWidth}px`;
+      canvas.style.height=`${window.innerHeight}px`;
+      context.setTransform(pixelRatio,0,0,pixelRatio,0,0);
+
+      points=Array.from(
+        {length:Math.min(90,Math.floor(window.innerWidth/16))},
+        ()=>({
+          x:Math.random()*window.innerWidth,
+          y:Math.random()*window.innerHeight,
+          vx:(Math.random()-0.5)*0.24,
+          vy:(Math.random()-0.5)*0.24,
+        }),
+      );
+    }
+
+    function drawNetwork(){
+      context.clearRect(0,0,window.innerWidth,window.innerHeight);
+
+      points.forEach((point)=>{
+        point.x+=point.vx;
+        point.y+=point.vy;
+        if(point.x<0||point.x>window.innerWidth) point.vx*=-1;
+        if(point.y<0||point.y>window.innerHeight) point.vy*=-1;
+
+        const mouseDistance=Math.hypot(point.x-mouse.x,point.y-mouse.y);
+        if(mouseDistance<120){
+          point.x+=(point.x-mouse.x)*0.003;
+          point.y+=(point.y-mouse.y)*0.003;
+        }
+
+        context.fillStyle=networkDotColor;
+        context.beginPath();
+        context.arc(point.x,point.y,1.15,0,Math.PI*2);
+        context.fill();
+      });
+
+      for(let i=0;i<points.length;i+=1){
+        for(let j=i+1;j<points.length;j+=1){
+          const distance=Math.hypot(points[i].x-points[j].x,points[i].y-points[j].y);
+          if(distance<115){
+            const lineAlpha=(1-distance/115)*networkLineOpacity;
+            context.strokeStyle=`rgba(${networkLineColorRGB}, ${lineAlpha})`;
+            context.beginPath();
+            context.moveTo(points[i].x,points[i].y);
+            context.lineTo(points[j].x,points[j].y);
+            context.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(drawNetwork);
+    }
+
+    window.addEventListener('resize',resizeCanvas);
+    window.addEventListener('mousemove',(event)=>{
+      mouse={x:event.clientX,y:event.clientY};
+    });
+
+    const langButton=document.createElement('button'); langButton.className='control'; langButton.type='button';
+    const themeButton=document.createElement('button'); themeButton.className='control'; themeButton.type='button';
+    controls.append(langButton,themeButton);
+    function setTheme(theme){const light=theme==='light';document.documentElement.dataset.theme=light?'light':'dark';themeButton.textContent=light?'☾':'☀';themeButton.setAttribute('aria-label',light?'Switch to dark mode':'Switch to light mode');localStorage.setItem('portfolio-theme',theme);updateNetworkPalette();}
+    function setLanguage(language){const arabic=language==='ar';const t=translations[language];document.body.classList.toggle('ar',arabic);document.documentElement.lang=language;document.documentElement.dir=arabic?'rtl':'ltr';document.querySelector('.kicker').textContent=t.kicker;document.querySelector('h1').textContent=t.title;document.querySelector('.lead').textContent=t.lead;const headings=document.querySelectorAll('.card h2');[t.overview,t.activities,t.security,t.stack].forEach((text,i)=>headings[i].textContent=text);document.querySelectorAll('.card p')[0].textContent=t.overviewText;document.querySelectorAll('.card p')[1].textContent=t.securityText;document.querySelector('.gallery h2').textContent=t.gallery;langButton.textContent=arabic?'English':'عربي';localStorage.setItem('portfolio-language',language);}
+    langButton.addEventListener('click',()=>setLanguage(document.body.classList.contains('ar')?'en':'ar'));
+    themeButton.addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='light'?'dark':'light'));
+    resizeCanvas();
+    setTheme(localStorage.getItem('portfolio-theme')||'dark');
+    setLanguage(localStorage.getItem('portfolio-language')||'en');
+    if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      drawNetwork();
+    }
+  </script>
+</body>
+</html>
