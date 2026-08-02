@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="description" content="Basma Alsaif cybersecurity portfolio 404 page." />
+  <title>404 | Basma Alsaif</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#162033;
+      --cyan:#3ee7df;
+      --blue:#4f8dff;
+      --white:#f8fafc;
+      --muted:rgba(248,250,252,.72);
+      --line:rgba(160,190,255,.16);
+      --panel:rgba(10,18,32,.56);
+      --shadow:0 30px 90px rgba(0,0,0,.42);
+      --radius:30px;
+      --network-dot:rgba(143,192,255,.38);
+      --network-line:rgba(85,230,211,.11);
+    }
+
+    * { box-sizing:border-box; }
+    html, body { height:100%; }
+    body {
+      margin:0;
+      min-height:100vh;
+      overflow:hidden;
+      color:var(--white);
+      font:16px/1.6 Inter, "IBM Plex Sans Arabic", sans-serif;
+      background:
+        radial-gradient(circle at 12% 5%, rgba(106,168,255,.16), transparent 27%),
+        radial-gradient(circle at 88% 8%, rgba(85,230,211,.12), transparent 24%),
+        linear-gradient(180deg, var(--bg), #091526 56%, var(--bg));
+    }
+
+    body::before,
+    body::after {
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+    }
+
+    body::before {
+      background:
+        linear-gradient(transparent 0%, rgba(255,255,255,.02) 49%, transparent 50%),
+        linear-gradient(90deg, transparent 0%, rgba(255,255,255,.03) 50%, transparent 100%);
+      background-size:100% 3px, 3px 100%;
+      opacity:.08;
+      animation:scan 10s linear infinite;
+    }
+
+    body::after {
+      background:
+        radial-gradient(circle at 50% 34%, rgba(62,231,223,.12), transparent 18%),
+        radial-gradient(circle at 58% 38%, rgba(79,141,255,.08), transparent 24%);
+      filter:blur(18px);
+      opacity:.8;
+    }
+
+    .network,
+    .orb {
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+    }
+
+    .network { z-index:-3; }
+    .orb {
+      z-index:-2;
+      width:260px;
+      height:260px;
+      border-radius:50%;
+      filter:blur(55px);
+      opacity:.14;
+      animation:drift 18s ease-in-out infinite;
+    }
+    .orb.one { background:var(--blue); top:16%; left:-80px; animation:drift1 12s ease-in-out infinite; }
+    .orb.two { background:var(--cyan); right:-100px; top:48%; animation:drift2 15s ease-in-out infinite; }
+
+    .shell {
+      position:relative;
+      z-index:5;
+      min-height:100svh;
+      display:grid;
+      place-items:center;
+      padding:28px;
+    }
+
+    .panel {
+      width:min(calc(100% - 64px), 760px);
+      max-height:calc(100svh - 56px);
+      border:1px solid rgba(160,190,255,.16);
+      border-radius:34px;
+      background:linear-gradient(180deg, rgba(12,20,35,.20), rgba(10,18,32,.28));
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(24px) saturate(135%);
+      position:relative;
+      overflow:hidden;
+      padding:26px;
+      text-align:center;
+      transform-style:preserve-3d;
+      will-change:transform;
+      display:grid;
+      align-content:center;
+      gap:4px;
+    }
+
+    .panel::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      padding:1px;
+      background:linear-gradient(135deg, rgba(62,231,223,.45), rgba(79,141,255,.18), rgba(255,255,255,.08));
+      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor;
+      mask-composite:exclude;
+      opacity:.75;
+      pointer-events:none;
+    }
+
+    .panel::after {
+      content:"";
+      position:absolute;
+      inset:auto -12% -24% -12%;
+      height:42%;
+      background:radial-gradient(circle at 50% 0%, rgba(62,231,223,.16), transparent 60%);
+      filter:blur(24px);
+      pointer-events:none;
+    }
+
+    .eyebrow {
+      display:inline-flex;
+      align-items:baseline;
+      gap:2px;
+      margin-bottom:24px;
+      color:#f3f7fb;
+      font-size:20px;
+      line-height:1;
+      font-weight:800;
+      letter-spacing:-.04em;
+    }
+
+    .eyebrow .dot {
+      color:var(--cyan);
+      font-size:1.05em;
+      line-height:1;
+    }
+
+    .digit-404 {
+      margin:18px 0 8px;
+      font-size:clamp(4rem, 9vw, 7rem);
+      line-height:.9;
+      letter-spacing:-.1em;
+      font-weight:800;
+      background:linear-gradient(90deg, #fff 0%, #e9fbff 18%, var(--cyan) 62%, var(--blue) 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      filter:drop-shadow(0 0 28px rgba(62,231,223,.14));
+      text-shadow:0 0 36px rgba(62,231,223,.08);
+      animation:float404 5.8s ease-in-out infinite;
+    }
+
+    .headline {
+      margin:0;
+      font-size:clamp(2.35rem, 4.7vw, 4.45rem);
+      line-height:1.03;
+      letter-spacing:-.07em;
+      text-wrap:balance;
+    }
+
+    .headline span {
+      background:linear-gradient(90deg, #fff 0%, #dffbff 22%, var(--cyan) 58%, var(--blue) 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      filter:drop-shadow(0 0 18px rgba(62,231,223,.12));
+    }
+
+    .description {
+      margin:20px auto 0;
+      max-width:56ch;
+      color:var(--muted);
+      font-size:1.06rem;
+    }
+
+    .actions {
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      justify-content:center;
+      margin-top:30px;
+    }
+
+    .button {
+      position:relative;
+      isolation:isolate;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:54px;
+      padding:0 22px;
+      border-radius:16px;
+      text-decoration:none;
+      font-weight:800;
+      border:1px solid rgba(160,190,255,.16);
+      overflow:hidden;
+      transition:transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s cubic-bezier(.2,.8,.2,1), border-color .25s, background .25s;
+      will-change:transform;
+    }
+
+    .button::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(120deg, transparent 10%, rgba(255,255,255,.18) 45%, transparent 68%);
+      transform:translateX(-120%);
+      transition:transform .7s cubic-bezier(.2,.8,.2,1);
+      z-index:-1;
+    }
+
+    .button::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.24), transparent 28%);
+      opacity:0;
+      transition:opacity .22s;
+      pointer-events:none;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      outline:none;
+      transform:translateY(-3px) scale(1.01);
+      border-color:rgba(62,231,223,.58);
+      box-shadow:0 18px 42px rgba(0,0,0,.24), 0 0 0 1px rgba(62,231,223,.12) inset;
+    }
+
+    .button:hover::before,
+    .button:focus-visible::before { transform:translateX(120%); }
+    .button:hover::after,
+    .button:focus-visible::after { opacity:1; }
+
+    .button.primary {
+      color:#04131b;
+      background:linear-gradient(135deg, var(--cyan), #98fff8);
+      box-shadow:0 16px 36px rgba(62,231,223,.18), 0 0 0 1px rgba(255,255,255,.12) inset;
+    }
+
+    .button.secondary {
+      color:var(--white);
+      background:rgba(255,255,255,.05);
+    }
+
+    .button .ripple {
+      position:absolute;
+      border-radius:999px;
+      transform:scale(0);
+      animation:ripple .65s ease-out;
+      background:rgba(255,255,255,.55);
+      pointer-events:none;
+    }
+
+    @keyframes float404 {
+      0%,100% { transform:translateY(0) scale(1); }
+      50% { transform:translateY(-8px) scale(1.01); }
+    }
+    @keyframes drift1{50%{transform:translate(90px,70px) scale(1.2)}}
+    @keyframes drift2{50%{transform:translate(-110px,-60px) scale(.85)}}
+    @keyframes scan { from { transform:translateY(-12px); } to { transform:translateY(12px); } }
+    @keyframes binaryFloat {
+      0% { transform:translate3d(0, 0, 0) rotate(0deg); }
+      50% { transform:translate3d(14px, -18px, 0) rotate(1deg); }
+      100% { transform:translate3d(-8px, 12px, 0) rotate(-1deg); }
+    }
+    @keyframes ripple { to { transform:scale(18); opacity:0; } }
+    @keyframes fadeOut { to { opacity:0; transform:scale(.985); filter:blur(10px); } }
+
+    @media (max-width: 640px) {
+      .shell { padding:16px; }
+      .panel { padding:24px 18px 22px; border-radius:24px; }
+      .headline { font-size:clamp(2.15rem, 12vw, 3.6rem); }
+      .description { font-size:1rem; }
+      .button { width:100%; }
+      .actions .button { flex:1 1 100%; }
+      .digit-404 { font-size:clamp(3.3rem, 16vw, 5rem); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation:none !important;
+        transition:none !important;
+        scroll-behavior:auto !important;
+      }
+      body::before { opacity:.04; }
+    }
+  </style>
+</head>
+<body>
+  <canvas class="network" id="network" aria-hidden="true"></canvas>
+  <div class="orb one" aria-hidden="true"></div>
+  <div class="orb two" aria-hidden="true"></div>
+
+  <main class="shell">
+    <section class="panel" id="panel">
+      <div class="eyebrow">Basma<span class="dot">.</span></div>
+      <div class="digit-404" aria-hidden="true">404</div>
+      <h1 class="headline"><span>Looks like this page vanished into cyberspace.</span></h1>
+      <p class="description">The page you're looking for may have been moved, renamed, or never existed. Let's get you back to the secure side of the internet.</p>
+      <div class="actions">
+        <a class="button primary" href="/" data-label="Return Home">Return Home</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const root = document.documentElement;
+    const body = document.body;
+    const panel = document.getElementById('panel');
+    const canvas = document.getElementById('network');
+    const context = canvas.getContext('2d');
+    const buttons = document.querySelectorAll('.button');
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let tiltX = 0;
+    let tiltY = 0;
+    let points = [];
+    let mouse = { x: -9999, y: -9999 };
+    let networkDotColor = 'rgba(143, 192, 255, 0.38)';
+    let networkLineColorRGB = '85, 230, 211';
+    let networkLineOpacity = 0.11;
+
+    function updateNetworkPalette() {
+      networkDotColor = 'rgba(143, 192, 255, 0.38)';
+      networkLineColorRGB = '85, 230, 211';
+      networkLineOpacity = 0.11;
+    }
+
+    function createNetwork() {
+      function resize() {
+        const pixelRatio = window.devicePixelRatio || 1;
+        canvas.width = window.innerWidth * pixelRatio;
+        canvas.height = window.innerHeight * pixelRatio;
+        canvas.style.width = `${window.innerWidth}px`;
+        canvas.style.height = `${window.innerHeight}px`;
+        context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+        points = Array.from({ length: Math.min(95, Math.floor(window.innerWidth / 16)) }, () => ({
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight,
+          vx: (Math.random() - 0.5) * 0.24,
+          vy: (Math.random() - 0.5) * 0.24,
+        }));
+      }
+
+      function drawNetwork() {
+        context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+        points.forEach((point) => {
+          point.x += point.vx;
+          point.y += point.vy;
+          if (point.x < 0 || point.x > window.innerWidth) point.vx *= -1;
+          if (point.y < 0 || point.y > window.innerHeight) point.vy *= -1;
+
+          const mouseDistance = Math.hypot(point.x - mouse.x, point.y - mouse.y);
+          if (mouseDistance < 120) {
+            point.x += (point.x - mouse.x) * 0.003;
+            point.y += (point.y - mouse.y) * 0.003;
+          }
+
+          context.fillStyle = networkDotColor;
+          context.beginPath();
+          context.arc(point.x, point.y, 1.15, 0, Math.PI * 2);
+          context.fill();
+        });
+
+        for (let i = 0; i < points.length; i += 1) {
+          for (let j = i + 1; j < points.length; j += 1) {
+            const distance = Math.hypot(points[i].x - points[j].x, points[i].y - points[j].y);
+            if (distance < 115) {
+              const lineAlpha = (1 - distance / 115) * networkLineOpacity;
+              context.strokeStyle = `rgba(${networkLineColorRGB}, ${lineAlpha})`;
+              context.beginPath();
+              context.moveTo(points[i].x, points[i].y);
+              context.lineTo(points[j].x, points[j].y);
+              context.stroke();
+            }
+          }
+        }
+
+        requestAnimationFrame(drawNetwork);
+      }
+
+      resize();
+      window.addEventListener('resize', resize, { passive: true });
+      requestAnimationFrame(drawNetwork);
+    }
+
+    function updatePointer(event) {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const dx = (event.clientX - centerX) / centerX;
+      const dy = (event.clientY - centerY) / centerY;
+      root.style.setProperty('--spot-x', `${event.clientX}px`);
+      root.style.setProperty('--spot-y', `${event.clientY}px`);
+      tiltY = dx * 6;
+      tiltX = -dy * 7;
+    }
+
+    function animateFrame() {
+      const nextTiltX = tiltX * 0.25;
+      const nextTiltY = tiltY * 0.25;
+      panel.style.transform = `rotateX(${nextTiltX}deg) rotateY(${nextTiltY}deg) translate3d(0,0,0)`;
+      requestAnimationFrame(animateFrame);
+    }
+
+    if (prefersReducedMotion) {
+      body.style.overflow = 'auto';
+    }
+
+    updateNetworkPalette();
+    createNetwork();
+    animateFrame();
+    window.addEventListener('pointermove', updatePointer, { passive: true });
+  </script>
+</body>
+</html>
