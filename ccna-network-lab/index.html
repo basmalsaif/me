@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CCNA Network Setup and Security Lab case study by Basma Alsaif.">
+  <title>CCNA Network Setup &amp; Security Lab | Basma Alsaif</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    :root {
+      --bg:#050b14;
+      --bg2:#091526;
+      --panel:rgba(14,31,52,.82);
+      --line:rgba(148,163,184,.2);
+      --text:#f8fbff;
+      --muted:#a8b8c9;
+      --cyan:#55e6d3;
+      --blue:#6aa8ff;
+      --max:1080px;
+      --radius:22px;
+      --network-dot:rgba(143,192,255,.38);
+      --network-line-rgb:85,230,211;
+      --network-line-opacity:.11;
+    }
+
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      min-height:100vh;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 5%, rgba(106,168,255,.16), transparent 30%),
+        radial-gradient(circle at 85% 10%, rgba(85,230,211,.12), transparent 26%),
+        linear-gradient(180deg, var(--bg), var(--bg2) 56%, var(--bg));
+      font:16px/1.72 Inter, "IBM Plex Sans Arabic", sans-serif;
+      overflow-x:hidden;
+    }
+    body.ar {
+      direction:rtl;
+      text-align:right;
+      font-family:"IBM Plex Sans Arabic", Inter, sans-serif;
+    }
+
+    .network { position:fixed; inset:0; width:100%; height:100%; z-index:-2; pointer-events:none; }
+    .container { width:min(calc(100% - 34px), var(--max)); margin:auto; }
+
+    header {
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter:blur(16px);
+      background:rgba(5,11,20,.66);
+      border-bottom:1px solid var(--line);
+    }
+    .header-inner {
+      height:86px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      direction:ltr;
+    }
+    .back {
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      color:var(--cyan);
+      text-decoration:none;
+      font-size:1.05rem;
+      font-weight:800;
+    }
+    .back i { font-size:1.45rem; }
+    .controls {
+      display:flex;
+      gap:8px;
+      margin-left:auto;
+      flex-shrink:0;
+    }
+    .control {
+      width:56px;
+      height:50px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:0;
+      font-weight:800;
+      cursor:pointer;
+      transition:transform .2s, border-color .2s, background .2s;
+    }
+    .control:hover { transform:translateY(-2px); border-color:var(--cyan); }
+    .lang-control i { font-size:1.15rem; line-height:1; pointer-events:none; }
+
+    main { padding:44px 0 90px; }
+    section { margin-top:28px; }
+
+    .panel {
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(15,31,52,.88), rgba(8,22,38,.8));
+      box-shadow:0 22px 44px rgba(0,0,0,.26);
+      position:relative;
+      overflow:hidden;
+    }
+    .panel::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(85,230,211,.1), transparent 48%);
+      opacity:0;
+      transition:opacity .25s;
+    }
+    .panel:hover::before { opacity:1; }
+
+    .hero {
+      padding:34px;
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:28px;
+      align-items:stretch;
+    }
+    .eyebrow {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid rgba(85,230,211,.34);
+      border-radius:999px;
+      padding:8px 13px;
+      color:#bffef5;
+      font-size:.8rem;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      margin-bottom:16px;
+      background:rgba(85,230,211,.08);
+    }
+    .hero h1 {
+      margin:0 0 14px;
+      font-size:clamp(2.2rem, 4.8vw, 4rem);
+      line-height:1.02;
+      letter-spacing:-.045em;
+    }
+    .hero .summary {
+      margin:0;
+      color:var(--muted);
+      font-size:1.07rem;
+      max-width:62ch;
+    }
+    .hero-actions {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:24px;
+    }
+    body.ar .hero-actions { justify-content:flex-start; }
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:46px;
+      padding:0 16px;
+      border-radius:12px;
+      text-decoration:none;
+      font-weight:800;
+      border:1px solid var(--line);
+      color:var(--text);
+      background:rgba(255,255,255,.04);
+      transition:transform .2s, border-color .2s, background .2s;
+    }
+    .btn:hover { transform:translateY(-2px); border-color:var(--cyan); }
+    .btn.primary {
+      border:1px solid var(--line);
+      color:var(--text);
+      background:rgba(255,255,255,.04);
+    }
+
+    .hero-meta {
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:10px;
+      align-content:start;
+    }
+    .meta-card {
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:rgba(255,255,255,.03);
+      min-height:92px;
+      transition:transform .22s, border-color .22s;
+    }
+    .meta-card:hover { transform:translateY(-2px); border-color:rgba(85,230,211,.42); }
+    .meta-card small {
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-size:.7rem;
+      display:block;
+      margin-bottom:8px;
+    }
+    .meta-card strong { font-size:.95rem; line-height:1.45; }
+
+    .split {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+    .split .panel { padding:24px; }
+    .split h3 { margin:0 0 10px; font-size:1.35rem; }
+    .split p { margin:0; color:var(--muted); }
+
+    .contrib,
+    .features,
+    .workflow,
+    .stack,
+    .showcase,
+    .learnings { padding:24px; }
+    .kicker {
+      color:var(--cyan);
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:.74rem;
+      font-weight:800;
+      margin-bottom:10px;
+      display:block;
+    }
+    .section-title {
+      margin:0 0 15px;
+      font-size:1.45rem;
+      letter-spacing:-.03em;
+    }
+
+    .contrib-grid,
+    .feature-grid,
+    .showcase-grid,
+    .learning-grid { display:grid; gap:12px; }
+    .contrib-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .feature-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
+    .learning-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
+
+    .contrib-card,
+    .feature-card,
+    .stack-col,
+    .learning,
+    .result,
+    .metric,
+    .shot,
+    .meta-card {
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+    }
+    .contrib-card,
+    .feature-card,
+    .stack-col,
+    .learning { padding:16px; }
+    .contrib-card:hover,
+    .feature-card:hover,
+    .learning:hover,
+    .shot:hover {
+      transform:translateY(-3px);
+      border-color:rgba(85,230,211,.45);
+    }
+    .contrib-card,
+    .feature-card,
+    .learning,
+    .shot { transition:transform .2s, border-color .2s, box-shadow .2s; }
+    .contrib-card h4,
+    .feature-card h4,
+    .stack-col h4,
+    .shot h4 { margin:0 0 10px; }
+    .contrib-card ul,
+    .security ul { margin:0; padding-left:18px; color:var(--muted); }
+    .contrib-card li + li,
+    .security li + li { margin-top:7px; }
+    body.ar .contrib-card ul,
+    body.ar .security ul { padding-left:0; padding-right:18px; }
+
+    .feature-card i { color:var(--cyan); font-size:1.15rem; }
+    .feature-card p,
+    .shot p { margin:0; color:var(--muted); font-size:.92rem; }
+
+    .workflow { overflow:hidden; }
+    .timeline {
+      margin-top:14px;
+      position:relative;
+      padding:18px 6px 2px;
+    }
+    .timeline-line {
+      position:absolute;
+      top:34px;
+      left:22px;
+      right:22px;
+      height:2px;
+      background:rgba(148,163,184,.22);
+      overflow:hidden;
+      border-radius:2px;
+    }
+    .timeline-line::after {
+      content:"";
+      position:absolute;
+      inset:0 auto 0 0;
+      width:var(--timeline-progress, 0%);
+      background:linear-gradient(90deg, var(--cyan), #8afcf0);
+      transition:width .18s linear;
+    }
+    .timeline-steps {
+      display:grid;
+      grid-template-columns:repeat(6,minmax(0,1fr));
+      gap:8px;
+      position:relative;
+      z-index:1;
+    }
+    .step { text-align:center; padding:0 6px; }
+    .step .dot {
+      width:15px;
+      height:15px;
+      margin:0 auto 12px;
+      border-radius:50%;
+      border:1px solid rgba(85,230,211,.42);
+      background:#113247;
+      box-shadow:0 0 0 6px rgba(85,230,211,.06);
+    }
+    .step p { margin:0; font-size:.84rem; color:var(--muted); }
+
+    .security {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+    .security .panel,
+    .outcome .panel { padding:24px; }
+    .security h3 { margin:0 0 10px; }
+
+    .stack-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+    .stack-col { min-height:160px; }
+    .stack-col h4 { color:var(--cyan); font-size:.95rem; }
+    .tech {
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      margin:0 6px 8px 0;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(106,168,255,.22);
+      background:rgba(106,168,255,.08);
+      font-size:.82rem;
+      position:relative;
+      transition:transform .2s, border-color .2s;
+      cursor:default;
+    }
+    .tech:hover { transform:translateY(-2px); border-color:var(--cyan); }
+    .tech[data-tip]::after {
+      content:attr(data-tip);
+      position:absolute;
+      bottom:calc(100% + 8px);
+      left:50%;
+      transform:translateX(-50%) translateY(8px);
+      opacity:0;
+      pointer-events:none;
+      white-space:nowrap;
+      padding:6px 8px;
+      border-radius:8px;
+      border:1px solid var(--line);
+      background:rgba(5,11,20,.95);
+      color:#d8e8ff;
+      font-size:.72rem;
+      transition:.2s;
+    }
+    .tech:hover::after {
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+    }
+
+    .showcase-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .shot {
+      overflow:hidden;
+      background:#0b1a2f;
+      min-height:340px;
+      display:flex;
+      flex-direction:column;
+      box-shadow:0 20px 36px rgba(0,0,0,.18);
+    }
+    .shot-image { position:relative; overflow:hidden; }
+    .shot img {
+      width:100%;
+      aspect-ratio:16/10;
+      object-fit:cover;
+      display:block;
+      transition:transform .35s ease;
+    }
+    .shot:hover img { transform:scale(1.06); }
+    .shot-image::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, transparent, rgba(6,15,24,.28));
+      pointer-events:none;
+    }
+    .shot-body {
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      flex:1;
+    }
+    .ghost-btn {
+      margin-top:auto;
+      align-self:flex-start;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:8px 10px;
+      font-weight:700;
+      cursor:pointer;
+      transition:border-color .2s, transform .2s;
+    }
+    .ghost-btn:hover { border-color:var(--cyan); transform:translateY(-1px); }
+
+    .outcome {
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:14px;
+    }
+    .result-grid,
+    .metrics { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .result {
+      padding:12px;
+      font-size:.9rem;
+      color:#d9e6f3;
+    }
+    .result i { color:var(--cyan); margin-right:8px; }
+    .metric {
+      padding:12px;
+      text-align:center;
+    }
+    .metric strong {
+      display:block;
+      font-size:1.8rem;
+      letter-spacing:-.03em;
+      margin-bottom:2px;
+    }
+    .metric span { color:var(--muted); font-size:.82rem; }
+
+    .learning { font-weight:600; }
+
+    .reveal {
+      opacity:0;
+      transform:translateY(20px) scale(.99);
+      filter:blur(4px);
+      transition:opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1), filter .8s cubic-bezier(.2,.7,.2,1);
+    }
+    .reveal.visible {
+      opacity:1;
+      transform:none;
+      filter:none;
+    }
+
+    .modal {
+      position:fixed;
+      inset:0;
+      background:rgba(4,10,18,.78);
+      backdrop-filter:blur(8px);
+      z-index:80;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .modal.open { display:flex; }
+    .modal-card {
+      width:min(1000px, 100%);
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      background:#0a1628;
+      position:relative;
+    }
+    .modal-card img { width:100%; display:block; max-height:76vh; object-fit:contain; background:#081224; }
+    .modal-close {
+      position:absolute;
+      top:10px;
+      right:10px;
+      width:42px;
+      height:42px;
+      border-radius:10px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.45);
+      color:#fff;
+      cursor:pointer;
+      font-size:1.1rem;
+    }
+
+    html[data-theme="light"] {
+      --bg:#eef5fb;
+      --bg2:#dceaf5;
+      --panel:rgba(255,255,255,.86);
+      --line:rgba(15,45,75,.16);
+      --text:#102236;
+      --muted:#51667c;
+      --cyan:#087f78;
+      --blue:#286cc2;
+      --network-dot:rgba(40,120,190,.34);
+      --network-line-rgb:40,120,190;
+      --network-line-opacity:.15;
+    }
+    html[data-theme="light"] body {
+      background:
+        radial-gradient(1200px 700px at 12% 8%, rgba(120,180,230,.2), transparent 55%),
+        radial-gradient(circle at 84% 14%, rgba(40,108,194,.12), transparent 30%),
+        linear-gradient(135deg, #f7fbff 0%, #eef6ff 48%, #e6f1ff 100%);
+    }
+    html[data-theme="light"] header { background:rgba(238,245,251,.68); }
+    html[data-theme="light"] .panel,
+    html[data-theme="light"] .shot,
+    html[data-theme="light"] .stack-col,
+    html[data-theme="light"] .feature-card,
+    html[data-theme="light"] .contrib-card,
+    html[data-theme="light"] .result,
+    html[data-theme="light"] .learning,
+    html[data-theme="light"] .metric,
+    html[data-theme="light"] .meta-card {
+      background:rgba(255,255,255,.76);
+    }
+    html[data-theme="light"] .eyebrow {
+      color:#076f69;
+      background:rgba(8,127,120,.14);
+      border-color:rgba(8,127,120,.34);
+    }
+    html[data-theme="light"] .result {
+      color:#17324a;
+      background:rgba(255,255,255,.88);
+    }
+    html[data-theme="light"] .result i { color:#087f78; }
+    html[data-theme="light"] .control {
+      background:rgba(255,255,255,.58);
+      color:var(--text);
+    }
+    body.ar .back { direction:rtl; }
+
+    @media (max-width: 1024px) {
+      .hero,
+      .outcome { grid-template-columns:1fr; }
+      .feature-grid,
+      .stack-grid,
+      .learning-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width: 760px) {
+      .split,
+      .contrib-grid,
+      .feature-grid,
+      .stack-grid,
+      .showcase-grid,
+      .security,
+      .learning-grid,
+      .result-grid,
+      .metrics,
+      .timeline-steps,
+      .hero-meta { grid-template-columns:1fr; }
+      .timeline-line { display:none; }
+      .back { font-size:1rem; }
+      .back i { font-size:1.2rem; }
+      .hero { padding:20px; }
+      .panel,
+      .contrib,
+      .features,
+      .workflow,
+      .stack,
+      .showcase,
+      .learnings { padding:18px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation:none !important; transition:none !important; }
+      .reveal { opacity:1; transform:none; filter:none; }
+    }
+  </style>
+</head>
+<body>
+  <canvas class="network" id="network" aria-hidden="true"></canvas>
+
+  <header>
+    <div class="container header-inner">
+      <a class="back" href="../index.html"><i class="fa-solid fa-arrow-left"></i> Back to portfolio</a>
+      <div class="controls">
+        <button id="langBtn" class="control lang-control" type="button" aria-label="Switch language"><i class="fa-solid fa-globe" aria-hidden="true"></i></button>
+        <button id="themeBtn" class="control" type="button" aria-label="Switch theme"></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel hero reveal" id="topHero">
+      <div>
+        <span class="eyebrow"><i class="fa-solid fa-network-wired"></i> Network Security Case Study</span>
+        <h1>CCNA Network Setup &amp; Security Lab</h1>
+        <p class="summary">Hands-on enterprise-style lab focused on network installation, segmentation, firewall policy configuration, and secure infrastructure administration.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#showcase"><i class="fa-regular fa-images"></i> View Lab Screens</a>
+          <a class="btn" href="#workflow"><i class="fa-solid fa-diagram-project"></i> Explore Workflow</a>
+        </div>
+      </div>
+      <div class="hero-meta">
+        <article class="meta-card"><small>Project Type</small><strong>Technical Lab</strong></article>
+        <article class="meta-card"><small>Focus</small><strong>Networking &amp; Security</strong></article>
+        <article class="meta-card"><small>Environment</small><strong>Enterprise-style Lab</strong></article>
+        <article class="meta-card"><small>Firewall</small><strong>FortiGate</strong></article>
+        <article class="meta-card"><small>Platforms</small><strong>Windows Server &amp; Red Hat Linux</strong></article>
+        <article class="meta-card"><small>Scope</small><strong>Configuration, Segmentation, Access Control</strong></article>
+        <article class="meta-card" style="grid-column:1 / -1;"><small>Technologies</small><strong>Routers, Switches, FortiGate, VLANs, Windows Server, Red Hat Linux</strong></article>
+      </div>
+    </section>
+
+    <section class="split reveal" id="problem-solving">
+      <article class="panel">
+        <span class="kicker">The Challenge</span>
+        <h3>Build a secure connected lab</h3>
+        <p>The project required connecting multiple devices, separating network traffic, controlling access between segments, and keeping services stable across mixed systems in a realistic lab environment.</p>
+      </article>
+      <article class="panel">
+        <span class="kicker">The Solution</span>
+        <h3>Layered network security setup</h3>
+        <p>The lab combined router and switch configuration, VLAN-style segmentation, firewall rule enforcement, and system administration practices to create a structured and controlled network setup.</p>
+      </article>
+    </section>
+
+    <section class="panel contrib reveal" id="contribution">
+      <span class="kicker">My Contribution</span>
+      <h2 class="section-title">What I configured and delivered</h2>
+      <div class="contrib-grid">
+        <article class="contrib-card">
+          <h4>Device Setup</h4>
+          <ul>
+            <li>Installed and prepared routers and switches.</li>
+            <li>Verified physical connectivity across the lab.</li>
+            <li>Organized device-level configuration workflow.</li>
+          </ul>
+        </article>
+        <article class="contrib-card">
+          <h4>Network Segmentation</h4>
+          <ul>
+            <li>Separated traffic for controlled communication paths.</li>
+            <li>Defined cleaner boundaries between network roles.</li>
+            <li>Reduced unnecessary cross-network exposure.</li>
+          </ul>
+        </article>
+        <article class="contrib-card">
+          <h4>Firewall &amp; Policies</h4>
+          <ul>
+            <li>Configured FortiGate security rules.</li>
+            <li>Applied access controls aligned with lab requirements.</li>
+            <li>Validated traffic behavior against policy intent.</li>
+          </ul>
+        </article>
+        <article class="contrib-card">
+          <h4>System Administration</h4>
+          <ul>
+            <li>Worked with Windows Server and Red Hat Linux.</li>
+            <li>Maintained service stability during configuration.</li>
+            <li>Supported the lab through troubleshooting and testing.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel features reveal" id="features">
+      <span class="kicker">Lab Highlights</span>
+      <h2 class="section-title">Core implementation areas</h2>
+      <div class="feature-grid">
+        <article class="feature-card"><i class="fa-solid fa-route"></i><h4>Routing Setup</h4><p>Configured routing behavior to support structured communication between devices and segments.</p></article>
+        <article class="feature-card"><i class="fa-solid fa-diagram-project"></i><h4>Traffic Segmentation</h4><p>Separated lab traffic to improve control, clarity, and security boundaries.</p></article>
+        <article class="feature-card"><i class="fa-solid fa-shield-halved"></i><h4>Firewall Enforcement</h4><p>Applied FortiGate policies to protect services and govern traffic flow.</p></article>
+        <article class="feature-card"><i class="fa-solid fa-server"></i><h4>Server Administration</h4><p>Maintained Windows Server and Red Hat Linux systems used inside the lab.</p></article>
+      </div>
+    </section>
+
+    <section class="panel workflow reveal" id="workflow">
+      <span class="kicker">Lab Workflow</span>
+      <h2 class="section-title">From setup to security validation</h2>
+      <div class="timeline" id="timeline">
+        <div class="timeline-line"></div>
+        <div class="timeline-steps">
+          <div class="step"><div class="dot"></div><p>Install Devices</p></div>
+          <div class="step"><div class="dot"></div><p>Configure Network</p></div>
+          <div class="step"><div class="dot"></div><p>Segment Traffic</p></div>
+          <div class="step"><div class="dot"></div><p>Apply Policies</p></div>
+          <div class="step"><div class="dot"></div><p>Test Connectivity</p></div>
+          <div class="step"><div class="dot"></div><p>Document Results</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="security reveal" id="security">
+      <article class="panel">
+        <span class="kicker">Security Focus</span>
+        <h3>Controls implemented in the lab</h3>
+        <ul>
+          <li>Traffic segmentation for isolation.</li>
+          <li>Firewall policy enforcement.</li>
+          <li>Access control between systems.</li>
+          <li>Administrative stability across servers.</li>
+          <li>Connectivity validation after each change.</li>
+        </ul>
+      </article>
+      <article class="panel">
+        <span class="kicker">Future Improvements</span>
+        <h3>Next hardening steps</h3>
+        <ul>
+          <li>Monitoring and alerting integration.</li>
+          <li>Stronger logging and audit review.</li>
+          <li>More granular access control rules.</li>
+          <li>Redundancy and resilience planning.</li>
+          <li>Expanded attack-simulation testing.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="panel stack reveal" id="stack">
+      <span class="kicker">Technical Environment</span>
+      <h2 class="section-title">Components used in the lab</h2>
+      <div class="stack-grid">
+        <article class="stack-col">
+          <h4>Network Devices</h4>
+          <span class="tech" data-tip="Traffic forwarding and connectivity"><i class="fa-solid fa-router"></i>Routers</span>
+          <span class="tech" data-tip="Switching and internal connectivity"><i class="fa-solid fa-ethernet"></i>Switches</span>
+        </article>
+        <article class="stack-col">
+          <h4>Security</h4>
+          <span class="tech" data-tip="Policy enforcement and filtering"><i class="fa-solid fa-shield-halved"></i>FortiGate</span>
+          <span class="tech" data-tip="Traffic separation and boundary control"><i class="fa-solid fa-diagram-project"></i>Segmentation</span>
+        </article>
+        <article class="stack-col">
+          <h4>Systems</h4>
+          <span class="tech" data-tip="Server administration tasks"><i class="fa-brands fa-windows"></i>Windows Server</span>
+          <span class="tech" data-tip="Linux system administration"><i class="fa-brands fa-redhat"></i>Red Hat Linux</span>
+        </article>
+        <article class="stack-col">
+          <h4>Operations</h4>
+          <span class="tech" data-tip="Controlled communication between systems"><i class="fa-solid fa-lock"></i>Access Control</span>
+          <span class="tech" data-tip="Security configuration rules"><i class="fa-solid fa-list-check"></i>Policies</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel showcase reveal" id="showcase">
+      <span class="kicker">Lab Showcase</span>
+      <h2 class="section-title">Key setup and validation screens</h2>
+      <div class="showcase-grid">
+        <article class="shot">
+          <div class="shot-image"><img src="../assets/images/ccna-lab-1.jpg" alt="Network equipment and lab setup"></div>
+          <div class="shot-body">
+            <h4>Lab Infrastructure</h4>
+            <p>Network equipment prepared and connected for the practical lab environment.</p>
+            <button class="ghost-btn" type="button" data-image="../assets/images/ccna-lab-1.jpg" data-title="Lab Infrastructure">Open Fullscreen</button>
+          </div>
+        </article>
+        <article class="shot">
+          <div class="shot-image"><img src="../assets/images/ccna-lab-2.jpg" alt="Computer workstations used in the network lab"></div>
+          <div class="shot-body">
+            <h4>Workstations</h4>
+            <p>Client systems used to test connectivity, access, and operational readiness.</p>
+            <button class="ghost-btn" type="button" data-image="../assets/images/ccna-lab-2.jpg" data-title="Workstations">Open Fullscreen</button>
+          </div>
+        </article>
+        <article class="shot">
+          <div class="shot-image"><img src="../assets/images/ccna-lab-3.jpg" alt="Network connectivity testing in the lab"></div>
+          <div class="shot-body">
+            <h4>Connectivity Testing</h4>
+            <p>Validation steps used to confirm proper communication and configuration results.</p>
+            <button class="ghost-btn" type="button" data-image="../assets/images/ccna-lab-3.jpg" data-title="Connectivity Testing">Open Fullscreen</button>
+          </div>
+        </article>
+        <article class="shot">
+          <div class="shot-image"><img src="../assets/images/ccna-lab-4.jpg" alt="Network cabling and tools used during setup"></div>
+          <div class="shot-body">
+            <h4>Cabling &amp; Tools</h4>
+            <p>Physical setup components used during installation and troubleshooting activities.</p>
+            <button class="ghost-btn" type="button" data-image="../assets/images/ccna-lab-4.jpg" data-title="Cabling &amp; Tools">Open Fullscreen</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="outcome reveal" id="outcome">
+      <article class="panel">
+        <span class="kicker">Project Outcome</span>
+        <h2 class="section-title">Delivered a structured secure lab setup</h2>
+        <p style="color:var(--muted); margin:0;">Completed a hands-on networking lab that combined installation, segmentation, firewall enforcement, and system administration into one controlled technical environment.</p>
+        <div class="result-grid">
+          <div class="result"><i class="fa-solid fa-circle-check"></i>Configured Network Devices</div>
+          <div class="result"><i class="fa-solid fa-circle-check"></i>Applied Security Policies</div>
+          <div class="result"><i class="fa-solid fa-circle-check"></i>Validated Connectivity</div>
+          <div class="result"><i class="fa-solid fa-circle-check"></i>Integrated Server Administration</div>
+          <div class="result"><i class="fa-solid fa-circle-check"></i>Completed Technical Lab</div>
+        </div>
+      </article>
+      <article class="panel">
+        <span class="kicker">Impact Snapshot</span>
+        <div class="metrics">
+          <div class="metric"><strong data-count="4">0</strong><span>Core Domains</span></div>
+          <div class="metric"><strong data-count="4">0</strong><span>Lab Views</span></div>
+          <div class="metric"><strong data-count="2">0</strong><span>Operating Platforms</span></div>
+          <div class="metric"><strong data-count="1">0</strong><span>Integrated Lab</span></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel learnings reveal" id="learnings">
+      <span class="kicker">Key Learnings</span>
+      <h2 class="section-title">Practical networking and security growth</h2>
+      <div class="learning-grid">
+        <div class="learning">Network Configuration</div>
+        <div class="learning">Firewall Administration</div>
+        <div class="learning">Access Control Design</div>
+        <div class="learning">System Stability</div>
+        <div class="learning">Troubleshooting</div>
+        <div class="learning">Infrastructure Thinking</div>
+        <div class="learning">Security Awareness</div>
+        <div class="learning">Technical Documentation</div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="imageModal" aria-hidden="true">
+    <div class="modal-card">
+      <button class="modal-close" id="closeModal" type="button" aria-label="Close image">✕</button>
+      <img id="modalImage" alt="Project screen preview">
+    </div>
+  </div>
+
+  <script>
+    const themeBtn = document.getElementById('themeBtn');
+    const langBtn = document.getElementById('langBtn');
+    const root = document.documentElement;
+
+    const i18n = {
+      en: {
+        pageTitle: 'CCNA Network Setup & Security Lab | Basma Alsaif',
+        backLabel: 'Back to portfolio',
+        eyebrow: 'Network Security Case Study',
+        title: 'CCNA Network Setup & Security Lab',
+        summary: 'Hands-on enterprise-style lab focused on network installation, segmentation, firewall policy configuration, and secure infrastructure administration.',
+        viewScreens: 'View Lab Screens',
+        exploreProject: 'Explore Workflow',
+        heroMetaLabels: ['Project Type', 'Focus', 'Environment', 'Firewall', 'Platforms', 'Scope', 'Technologies'],
+        heroMetaValues: ['Technical Lab', 'Networking & Security', 'Enterprise-style Lab', 'FortiGate', 'Windows Server & Red Hat Linux', 'Configuration, Segmentation, Access Control', 'Routers, Switches, FortiGate, VLANs, Windows Server, Red Hat Linux'],
+        challengeKicker: 'The Challenge',
+        challengeTitle: 'Build a secure connected lab',
+        challengeBody: 'The project required connecting multiple devices, separating network traffic, controlling access between segments, and keeping services stable across mixed systems in a realistic lab environment.',
+        solutionKicker: 'The Solution',
+        solutionTitle: 'Layered network security setup',
+        solutionBody: 'The lab combined router and switch configuration, VLAN-style segmentation, firewall rule enforcement, and system administration practices to create a structured and controlled network setup.',
+        contributionKicker: 'My Contribution',
+        contributionTitle: 'What I configured and delivered',
+        contributionHeads: ['Device Setup', 'Network Segmentation', 'Firewall & Policies', 'System Administration'],
+        contributionLists: [
+          ['Installed and prepared routers and switches.', 'Verified physical connectivity across the lab.', 'Organized device-level configuration workflow.'],
+          ['Separated traffic for controlled communication paths.', 'Defined cleaner boundaries between network roles.', 'Reduced unnecessary cross-network exposure.'],
+          ['Configured FortiGate security rules.', 'Applied access controls aligned with lab requirements.', 'Validated traffic behavior against policy intent.'],
+          ['Worked with Windows Server and Red Hat Linux.', 'Maintained service stability during configuration.', 'Supported the lab through troubleshooting and testing.']
+        ],
+        featuresKicker: 'Lab Highlights',
+        featuresTitle: 'Core implementation areas',
+        featureHeads: ['Routing Setup', 'Traffic Segmentation', 'Firewall Enforcement', 'Server Administration'],
+        featureBodies: [
+          'Configured routing behavior to support structured communication between devices and segments.',
+          'Separated lab traffic to improve control, clarity, and security boundaries.',
+          'Applied FortiGate policies to protect services and govern traffic flow.',
+          'Maintained Windows Server and Red Hat Linux systems used inside the lab.'
+        ],
+        workflowKicker: 'Lab Workflow',
+        workflowTitle: 'From setup to security validation',
+        workflowSteps: ['Install Devices', 'Configure Network', 'Segment Traffic', 'Apply Policies', 'Test Connectivity', 'Document Results'],
+        securityKicker: 'Security Focus',
+        securityTitle: 'Controls implemented in the lab',
+        securityItems: ['Traffic segmentation for isolation.', 'Firewall policy enforcement.', 'Access control between systems.', 'Administrative stability across servers.', 'Connectivity validation after each change.'],
+        futureKicker: 'Future Improvements',
+        futureTitle: 'Next hardening steps',
+        futureItems: ['Monitoring and alerting integration.', 'Stronger logging and audit review.', 'More granular access control rules.', 'Redundancy and resilience planning.', 'Expanded attack-simulation testing.'],
+        stackKicker: 'Technical Environment',
+        stackTitle: 'Components used in the lab',
+        stackHeads: ['Network Devices', 'Security', 'Systems', 'Operations'],
+        stackTips: ['Traffic forwarding and connectivity', 'Switching and internal connectivity', 'Policy enforcement and filtering', 'Traffic separation and boundary control', 'Server administration tasks', 'Linux system administration', 'Controlled communication between systems', 'Security configuration rules'],
+        showcaseKicker: 'Lab Showcase',
+        showcaseTitle: 'Key setup and validation screens',
+        shotHeads: ['Lab Infrastructure', 'Workstations', 'Connectivity Testing', 'Cabling & Tools'],
+        shotBodies: ['Network equipment prepared and connected for the practical lab environment.', 'Client systems used to test connectivity, access, and operational readiness.', 'Validation steps used to confirm proper communication and configuration results.', 'Physical setup components used during installation and troubleshooting activities.'],
+        shotAlts: ['Network equipment and lab setup', 'Computer workstations used in the network lab', 'Network connectivity testing in the lab', 'Network cabling and tools used during setup'],
+        openFullscreen: 'Open Fullscreen',
+        outcomeKicker: 'Project Outcome',
+        outcomeTitle: 'Delivered a structured secure lab setup',
+        outcomeBody: 'Completed a hands-on networking lab that combined installation, segmentation, firewall enforcement, and system administration into one controlled technical environment.',
+        outcomeResults: ['Configured Network Devices', 'Applied Security Policies', 'Validated Connectivity', 'Integrated Server Administration', 'Completed Technical Lab'],
+        impactKicker: 'Impact Snapshot',
+        metricLabels: ['Core Domains', 'Lab Views', 'Operating Platforms', 'Integrated Lab'],
+        learnKicker: 'Key Learnings',
+        learnTitle: 'Practical networking and security growth',
+        learnItems: ['Network Configuration', 'Firewall Administration', 'Access Control Design', 'System Stability', 'Troubleshooting', 'Infrastructure Thinking', 'Security Awareness', 'Technical Documentation']
+      },
+      ar: {
+        pageTitle: 'مختبر إعداد الشبكات وأمنها CCNA | بسمة الصيف',
+        backLabel: 'العودة إلى البورتفوليو',
+        eyebrow: 'دراسة حالة مختبر الشبكات والأمن',
+        title: 'مختبر إعداد الشبكات وأمنها CCNA',
+        summary: 'مختبر عملي بأسلوب بيئات المؤسسات يركز على تركيب الشبكة، وتقسيمها، وتهيئة سياسات الجدار الناري، وإدارة البنية التحتية بشكل آمن.',
+        viewScreens: 'عرض صور المختبر',
+        exploreProject: 'استكشاف سير العمل',
+        heroMetaLabels: ['نوع المشروع', 'التركيز', 'البيئة', 'الجدار الناري', 'المنصات', 'النطاق', 'التقنيات'],
+        heroMetaValues: ['مختبر تقني', 'الشبكات والأمن', 'مختبر مشابه لبيئات المؤسسات', 'FortiGate', 'Windows Server وRed Hat Linux', 'التهيئة، التقسيم، التحكم في الوصول', 'Routers، Switches، FortiGate، VLANs، Windows Server، Red Hat Linux'],
+        challengeKicker: 'التحدي',
+        challengeTitle: 'بناء مختبر آمن ومترابط',
+        challengeBody: 'تطلب المشروع ربط عدة أجهزة، وفصل حركة المرور الشبكية، والتحكم في الوصول بين الأجزاء المختلفة، مع الحفاظ على استقرار الخدمات عبر أنظمة متنوعة داخل بيئة مختبر واقعية.',
+        solutionKicker: 'الحل',
+        solutionTitle: 'تهيئة أمنية شبكية متعددة الطبقات',
+        solutionBody: 'جمع المختبر بين إعداد الموجهات والمحولات، وتقسيم الشبكة، وتطبيق قواعد الجدار الناري، وممارسات إدارة الأنظمة لإنشاء بيئة شبكية منظمة ومضبوطة.',
+        contributionKicker: 'مساهمتي',
+        contributionTitle: 'ما الذي قمت بتهيئته وإنجازه',
+        contributionHeads: ['إعداد الأجهزة', 'تقسيم الشبكة', 'الجدار الناري والسياسات', 'إدارة الأنظمة'],
+        contributionLists: [
+          ['قمت بتركيب وتجهيز الموجهات والمحولات.', 'تحققت من الاتصال الفيزيائي عبر المختبر.', 'نظمت سير العمل الخاص بتهيئة الأجهزة.'],
+          ['فصلت حركة المرور لمسارات اتصال أكثر ضبطًا.', 'حددت حدودًا أوضح بين أدوار الشبكة المختلفة.', 'قللت التعرض غير الضروري بين أجزاء الشبكة.'],
+          ['هيأت قواعد FortiGate الأمنية.', 'طبقت ضوابط وصول متوافقة مع متطلبات المختبر.', 'تحققت من سلوك الحركة الشبكية وفق الهدف الأمني.'],
+          ['عملت على Windows Server وRed Hat Linux.', 'حافظت على استقرار الخدمات أثناء التهيئة.', 'دعمت المختبر عبر الاستكشاف والاختبار الفني.']
+        ],
+        featuresKicker: 'أبرز ما في المختبر',
+        featuresTitle: 'محاور التنفيذ الأساسية',
+        featureHeads: ['إعداد التوجيه', 'تقسيم حركة المرور', 'تطبيق الجدار الناري', 'إدارة الخوادم'],
+        featureBodies: [
+          'تهيئة سلوك التوجيه لدعم اتصال منظم بين الأجهزة والأجزاء المختلفة.',
+          'فصل حركة المرور لتحسين التحكم والوضوح والحدود الأمنية.',
+          'تطبيق سياسات FortiGate لحماية الخدمات وضبط تدفق الحركة.',
+          'إدارة أنظمة Windows Server وRed Hat Linux داخل المختبر.'
+        ],
+        workflowKicker: 'سير عمل المختبر',
+        workflowTitle: 'من الإعداد إلى التحقق الأمني',
+        workflowSteps: ['تركيب الأجهزة', 'تهيئة الشبكة', 'تقسيم الحركة', 'تطبيق السياسات', 'اختبار الاتصال', 'توثيق النتائج'],
+        securityKicker: 'التركيز الأمني',
+        securityTitle: 'الضوابط المطبقة في المختبر',
+        securityItems: ['تقسيم حركة المرور للعزل.', 'تطبيق سياسات الجدار الناري.', 'التحكم في الوصول بين الأنظمة.', 'الحفاظ على الاستقرار الإداري للخوادم.', 'التحقق من الاتصال بعد كل تغيير.'],
+        futureKicker: 'تحسينات مستقبلية',
+        futureTitle: 'خطوات التقوية التالية',
+        futureItems: ['دمج المراقبة والتنبيهات.', 'تعزيز السجلات ومراجعة التدقيق.', 'قواعد وصول أكثر تفصيلًا.', 'التخطيط للتكرار والمرونة.', 'توسيع اختبارات المحاكاة الهجومية.'],
+        stackKicker: 'البيئة التقنية',
+        stackTitle: 'المكونات المستخدمة في المختبر',
+        stackHeads: ['أجهزة الشبكة', 'الأمن', 'الأنظمة', 'العمليات'],
+        stackTips: ['توجيه الحركة والاتصال', 'الربط الداخلي بين الأجهزة', 'تطبيق السياسات والفلترة', 'فصل الحركة وحدود التحكم', 'مهام إدارة الخوادم', 'إدارة أنظمة لينكس', 'اتصال منضبط بين الأنظمة', 'قواعد الضبط الأمني'],
+        showcaseKicker: 'عرض المختبر',
+        showcaseTitle: 'أهم صور الإعداد والتحقق',
+        shotHeads: ['بنية المختبر', 'محطات العمل', 'اختبارات الاتصال', 'الكابلات والأدوات'],
+        shotBodies: ['معدات الشبكة بعد التجهيز والربط داخل بيئة المختبر العملية.', 'أنظمة عميلة استُخدمت لاختبار الاتصال والوصول والجاهزية التشغيلية.', 'خطوات التحقق المستخدمة لتأكيد نتائج الاتصال والتهيئة.', 'عناصر الإعداد الفيزيائي المستخدمة أثناء التركيب والاستكشاف.'],
+        shotAlts: ['معدات الشبكة وإعداد المختبر', 'محطات العمل المستخدمة في مختبر الشبكة', 'اختبار الاتصال الشبكي داخل المختبر', 'الكابلات والأدوات المستخدمة أثناء الإعداد'],
+        openFullscreen: 'عرض كامل',
+        outcomeKicker: 'نتيجة المشروع',
+        outcomeTitle: 'تسليم مختبر منظم وآمن',
+        outcomeBody: 'اكتمل مختبر عملي في الشبكات جمع بين التركيب، والتقسيم، وتطبيق الجدار الناري، وإدارة الأنظمة داخل بيئة تقنية واحدة مضبوطة.',
+        outcomeResults: ['تهيئة أجهزة الشبكة', 'تطبيق السياسات الأمنية', 'التحقق من الاتصال', 'دمج إدارة الخوادم', 'إتمام المختبر التقني'],
+        impactKicker: 'لقطة أثر',
+        metricLabels: ['مجالات أساسية', 'صور المختبر', 'منصات تشغيل', 'مختبر متكامل'],
+        learnKicker: 'أهم الدروس',
+        learnTitle: 'نمو عملي في الشبكات والأمن',
+        learnItems: ['تهيئة الشبكات', 'إدارة الجدار الناري', 'تصميم التحكم في الوصول', 'استقرار الأنظمة', 'استكشاف الأعطال', 'التفكير البنيوي', 'الوعي الأمني', 'التوثيق التقني']
+      }
+    };
+
+    function setLanguage(lang) {
+      const t = i18n[lang] || i18n.en;
+      const isArabic = lang === 'ar';
+      document.title = t.pageTitle;
+      root.lang = isArabic ? 'ar' : 'en';
+      root.dir = isArabic ? 'rtl' : 'ltr';
+      document.body.classList.toggle('ar', isArabic);
+
+      const back = document.querySelector('.back');
+      back.innerHTML = `<i class="fa-solid ${isArabic ? 'fa-arrow-right' : 'fa-arrow-left'}"></i> ${t.backLabel}`;
+
+      document.querySelector('.eyebrow').innerHTML = `<i class="fa-solid fa-network-wired"></i> ${t.eyebrow}`;
+      document.querySelector('.hero h1').textContent = t.title;
+      document.querySelector('.hero .summary').textContent = t.summary;
+
+      const actions = document.querySelectorAll('.hero-actions .btn');
+      actions[0].innerHTML = `<i class="fa-regular fa-images"></i> ${t.viewScreens}`;
+      actions[1].innerHTML = `<i class="fa-solid fa-diagram-project"></i> ${t.exploreProject}`;
+
+      const metaLabels = document.querySelectorAll('.hero-meta .meta-card small');
+      const metaValues = document.querySelectorAll('.hero-meta .meta-card strong');
+      metaLabels.forEach((el, i) => { if (t.heroMetaLabels[i]) el.textContent = t.heroMetaLabels[i]; });
+      metaValues.forEach((el, i) => { if (t.heroMetaValues[i]) el.textContent = t.heroMetaValues[i]; });
+
+      const splitPanels = document.querySelectorAll('#problem-solving .panel');
+      splitPanels[0].querySelector('.kicker').textContent = t.challengeKicker;
+      splitPanels[0].querySelector('h3').textContent = t.challengeTitle;
+      splitPanels[0].querySelector('p').textContent = t.challengeBody;
+      splitPanels[1].querySelector('.kicker').textContent = t.solutionKicker;
+      splitPanels[1].querySelector('h3').textContent = t.solutionTitle;
+      splitPanels[1].querySelector('p').textContent = t.solutionBody;
+
+      document.querySelector('#contribution .kicker').textContent = t.contributionKicker;
+      document.querySelector('#contribution .section-title').textContent = t.contributionTitle;
+      const contribCards = document.querySelectorAll('#contribution .contrib-card');
+      contribCards.forEach((card, i) => {
+        card.querySelector('h4').textContent = t.contributionHeads[i];
+        card.querySelectorAll('li').forEach((li, idx) => { li.textContent = t.contributionLists[i][idx]; });
+      });
+
+      document.querySelector('#features .kicker').textContent = t.featuresKicker;
+      document.querySelector('#features .section-title').textContent = t.featuresTitle;
+      document.querySelectorAll('#features .feature-card').forEach((card, i) => {
+        card.querySelector('h4').textContent = t.featureHeads[i];
+        card.querySelector('p').textContent = t.featureBodies[i];
+      });
+
+      document.querySelector('#workflow .kicker').textContent = t.workflowKicker;
+      document.querySelector('#workflow .section-title').textContent = t.workflowTitle;
+      document.querySelectorAll('#workflow .step p').forEach((el, i) => { el.textContent = t.workflowSteps[i]; });
+
+      const securityPanels = document.querySelectorAll('#security .panel');
+      securityPanels[0].querySelector('.kicker').textContent = t.securityKicker;
+      securityPanels[0].querySelector('h3').textContent = t.securityTitle;
+      securityPanels[0].querySelectorAll('li').forEach((li, i) => { li.textContent = t.securityItems[i]; });
+      securityPanels[1].querySelector('.kicker').textContent = t.futureKicker;
+      securityPanels[1].querySelector('h3').textContent = t.futureTitle;
+      securityPanels[1].querySelectorAll('li').forEach((li, i) => { li.textContent = t.futureItems[i]; });
+
+      document.querySelector('#stack .kicker').textContent = t.stackKicker;
+      document.querySelector('#stack .section-title').textContent = t.stackTitle;
+      document.querySelectorAll('#stack .stack-col h4').forEach((h4, i) => { h4.textContent = t.stackHeads[i]; });
+      document.querySelectorAll('#stack .tech').forEach((tech, i) => {
+        if (t.stackTips[i]) tech.dataset.tip = t.stackTips[i];
+      });
+
+      document.querySelector('#showcase .kicker').textContent = t.showcaseKicker;
+      document.querySelector('#showcase .section-title').textContent = t.showcaseTitle;
+      const shots = document.querySelectorAll('#showcase .shot');
+      shots.forEach((shot, i) => {
+        shot.querySelector('h4').textContent = t.shotHeads[i];
+        shot.querySelector('p').textContent = t.shotBodies[i];
+        shot.querySelector('img').alt = t.shotAlts[i];
+        shot.querySelector('.ghost-btn').textContent = t.openFullscreen;
+        shot.querySelector('.ghost-btn').dataset.title = t.shotHeads[i];
+      });
+
+      const outcomePanels = document.querySelectorAll('#outcome .panel');
+      outcomePanels[0].querySelector('.kicker').textContent = t.outcomeKicker;
+      outcomePanels[0].querySelector('.section-title').textContent = t.outcomeTitle;
+      outcomePanels[0].querySelector('p').textContent = t.outcomeBody;
+      outcomePanels[0].querySelectorAll('.result').forEach((el, i) => {
+        el.innerHTML = `<i class="fa-solid fa-circle-check"></i>${t.outcomeResults[i]}`;
+      });
+      outcomePanels[1].querySelector('.kicker').textContent = t.impactKicker;
+      outcomePanels[1].querySelectorAll('.metric span').forEach((el, i) => { el.textContent = t.metricLabels[i]; });
+
+      document.querySelector('#learnings .kicker').textContent = t.learnKicker;
+      document.querySelector('#learnings .section-title').textContent = t.learnTitle;
+      document.querySelectorAll('#learnings .learning').forEach((el, i) => { el.textContent = t.learnItems[i]; });
+
+      langBtn.innerHTML = '<i class="fa-solid fa-globe" aria-hidden="true"></i>';
+      langBtn.setAttribute('aria-label', isArabic ? 'Switch to English' : 'التبديل إلى العربية');
+      document.getElementById('closeModal').setAttribute('aria-label', isArabic ? 'إغلاق الصورة' : 'Close image');
+      localStorage.setItem('portfolio-language', lang);
+    }
+
+    function setTheme(theme) {
+      const light = theme === 'light';
+      root.dataset.theme = light ? 'light' : 'dark';
+      themeBtn.innerHTML = light
+        ? '<i class="fa-solid fa-moon" aria-hidden="true"></i>'
+        : '<i class="fa-solid fa-sun" aria-hidden="true"></i>';
+      themeBtn.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to light mode');
+      localStorage.setItem('portfolio-theme', light ? 'light' : 'dark');
+      updateNetworkPalette();
+    }
+
+    themeBtn.addEventListener('click', () => {
+      setTheme(root.dataset.theme === 'light' ? 'dark' : 'light');
+    });
+
+    langBtn.addEventListener('click', () => {
+      const next = root.lang === 'ar' ? 'en' : 'ar';
+      setLanguage(next);
+    });
+
+    const savedTheme = localStorage.getItem('portfolio-theme');
+    const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+    const savedLanguage = localStorage.getItem('portfolio-language');
+    const browserLanguage = (navigator.language || 'en').toLowerCase();
+
+    document.querySelectorAll('.panel, .feature-card, .contrib-card, .shot, .stack-col, .learning').forEach((card) => {
+      card.addEventListener('mousemove', (event) => {
+        const bounds = card.getBoundingClientRect();
+        const x = event.clientX - bounds.left;
+        const y = event.clientY - bounds.top;
+        card.style.setProperty('--mx', `${x}px`);
+        card.style.setProperty('--my', `${y}px`);
+      });
+    });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach((el, idx) => {
+      el.style.transitionDelay = `${Math.min(idx * 40, 260)}ms`;
+      revealObserver.observe(el);
+    });
+
+    const timeline = document.getElementById('timeline');
+    function updateTimelineProgress() {
+      const rect = timeline.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const start = vh * 0.85;
+      const end = vh * 0.25;
+      const progress = Math.max(0, Math.min(1, (start - rect.top) / (start - end)));
+      timeline.style.setProperty('--timeline-progress', `${progress * 100}%`);
+    }
+    window.addEventListener('scroll', updateTimelineProgress, { passive: true });
+    window.addEventListener('resize', updateTimelineProgress);
+    updateTimelineProgress();
+
+    const counters = document.querySelectorAll('[data-count]');
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const target = Number(entry.target.dataset.count || '0');
+        const start = performance.now();
+        const duration = 900;
+        const tick = (ts) => {
+          const p = Math.min((ts - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          entry.target.textContent = String(Math.round(target * eased));
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+        counterObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.4 });
+    counters.forEach((el) => counterObserver.observe(el));
+
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const closeModal = document.getElementById('closeModal');
+
+    document.querySelectorAll('.ghost-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        modalImage.src = btn.dataset.image;
+        modalImage.alt = btn.dataset.title || 'Project screen preview';
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+      });
+    });
+
+    function closeImageModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    closeModal.addEventListener('click', closeImageModal);
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeImageModal();
+    });
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeImageModal();
+    });
+
+    const canvas = document.getElementById('network');
+    const context = canvas.getContext('2d');
+    let points = [];
+    let mouse = { x: -9999, y: -9999 };
+    let networkDotColor = 'rgba(143, 192, 255, 0.38)';
+    let networkLineColorRGB = '85, 230, 211';
+    let networkLineOpacity = 0.11;
+
+    function updateNetworkPalette() {
+      const styles = getComputedStyle(document.documentElement);
+      networkDotColor = styles.getPropertyValue('--network-dot').trim() || 'rgba(143, 192, 255, 0.38)';
+      networkLineColorRGB = styles.getPropertyValue('--network-line-rgb').trim() || '85, 230, 211';
+      networkLineOpacity = Number(styles.getPropertyValue('--network-line-opacity').trim() || 0.11);
+    }
+
+    setTheme(savedTheme || (systemPrefersLight ? 'light' : 'dark'));
+    setLanguage(savedLanguage || (browserLanguage.startsWith('ar') ? 'ar' : 'en'));
+
+    function resizeCanvas() {
+      const pixelRatio = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * pixelRatio;
+      canvas.height = window.innerHeight * pixelRatio;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+      points = Array.from(
+        { length: Math.min(90, Math.floor(window.innerWidth / 16)) },
+        () => ({
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight,
+          vx: (Math.random() - 0.5) * 0.24,
+          vy: (Math.random() - 0.5) * 0.24,
+        })
+      );
+    }
+
+    function drawNetwork() {
+      context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+      points.forEach((point) => {
+        point.x += point.vx;
+        point.y += point.vy;
+        if (point.x < 0 || point.x > window.innerWidth) point.vx *= -1;
+        if (point.y < 0 || point.y > window.innerHeight) point.vy *= -1;
+
+        const mouseDistance = Math.hypot(point.x - mouse.x, point.y - mouse.y);
+        if (mouseDistance < 120) {
+          point.x += (point.x - mouse.x) * 0.003;
+          point.y += (point.y - mouse.y) * 0.003;
+        }
+
+        context.fillStyle = networkDotColor;
+        context.beginPath();
+        context.arc(point.x, point.y, 1.15, 0, Math.PI * 2);
+        context.fill();
+      });
+
+      for (let i = 0; i < points.length; i += 1) {
+        for (let j = i + 1; j < points.length; j += 1) {
+          const distance = Math.hypot(points[i].x - points[j].x, points[i].y - points[j].y);
+          if (distance < 115) {
+            const lineAlpha = (1 - distance / 115) * networkLineOpacity;
+            context.strokeStyle = `rgba(${networkLineColorRGB}, ${lineAlpha})`;
+            context.beginPath();
+            context.moveTo(points[i].x, points[i].y);
+            context.lineTo(points[j].x, points[j].y);
+            context.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(drawNetwork);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('mousemove', (event) => {
+      mouse = { x: event.clientX, y: event.clientY };
+    });
+
+    resizeCanvas();
+    updateNetworkPalette();
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      drawNetwork();
+    }
+  </script>
+</body>
+</html>
